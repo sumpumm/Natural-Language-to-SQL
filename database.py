@@ -16,3 +16,4 @@ db= SQLDatabase.from_uri(connection_string)
 
 print(db.dialect)
 print(db.get_usable_table_names())
+print(db.table_info) #give table schema along with row examples
