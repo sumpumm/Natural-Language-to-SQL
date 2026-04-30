@@ -1,0 +1,9 @@
+table,description
+productlines,Stores product line categories referenced by the products table via productLine
+products,Contains all scale model products each belonging to a productline and referenced by orderdetails via productCode
+offices,Holds company office locations worldwide referenced by the employees table via officeCode
+employees,Stores employee records with a self-referential hierarchy and linked to offices via officeCode and referenced by customers via salesRepEmployeeNumber
+customers,Contains customer account info linked to employees via salesRepEmployeeNumber and referenced by orders and payments via customerNumber
+orders,Records sales orders placed by customers linked via customerNumber and its line items stored in orderdetails
+orderdetails,Junction table linking orders and products via orderNumber and productCode as a composite primary key
+payments,Records customer payments linked to customers via customerNumber with checkNumber forming a composite primary key

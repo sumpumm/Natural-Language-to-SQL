@@ -12,7 +12,7 @@ db_port = os.getenv("db_port")
 
 connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
-db= SQLDatabase.from_uri(connection_string)
+db= SQLDatabase.from_uri(connection_string, sample_rows_in_table_info=1)
 
 print(db.dialect)
 print(db.get_usable_table_names())
