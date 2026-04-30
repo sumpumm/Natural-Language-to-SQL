@@ -4,8 +4,9 @@ from langchain_community.tools import QuerySQLDataBaseTool
 from langchain_classic.chains import create_sql_query_chain
 from langchain_core.output_parsers import  StrOutputParser
 from langchain_classic.schema.runnable import RunnablePassthrough, RunnableLambda
-from utils import extract_sql_query
-from prompts.templates import rephraser_template
+from langchain_community.vectorstores import Chroma
+from prompts.rephraser import rephraser_template
+from prompts.custom_template import final_template
 from operator import itemgetter
 from dotenv import load_dotenv
 import os
@@ -20,6 +21,7 @@ model2=ChatOllama(
     model="gpt-oss:latest"
 )
 
+
 db_user = os.getenv("db_user")
 db_password = os.getenv("db_password")
 db_host = os.getenv("db_host")
@@ -31,7 +33,12 @@ connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{
 db= SQLDatabase.from_uri(connection_string)
 
 
-query_generator= create_sql_query_chain(model1,db) 
+query_generator = create_sql_query_chain(
+    model1,
+    db,
+    prompt=final_template,
+    k=3
+)
 
 query_executor = QuerySQLDataBaseTool(db=db)
 
@@ -39,6 +46,6 @@ question = "what is the most expensive order and from whom?"
 
 rephraser_chain = rephraser_template | model1 | StrOutputParser()
 
-chain = ( RunnablePassthrough.assign(query= (query_generator | RunnableLambda(extract_sql_query))).assign(result =itemgetter("query") | query_executor) ) | rephraser_chain
+chain = ( RunnablePassthrough.assign(query= query_generator ).assign(result =itemgetter("query") | query_executor) ) | rephraser_chain
 
 print(chain.invoke({"question":question}))

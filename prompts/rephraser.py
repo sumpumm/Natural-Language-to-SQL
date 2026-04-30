@@ -10,3 +10,4 @@ rephraser_template=PromptTemplate(
 """,
 input_variables=['question', 'query', 'result']
 )
+
