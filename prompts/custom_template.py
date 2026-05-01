@@ -12,10 +12,10 @@ Here is the database schema:
 
 Limit results to {top_k} rows if applicable.
 
-\n\nBelow are a number of examples of questions and their corresponding SQL queries. \n\n
-Below is given the chat history. You must answer the follow up questions if asked using these messages.
+\n\nThe Below 3 pairs of User and AI messages are examples of questions and their corresponding SQL queries.  \n
 """),
     few_shot_prompt,
+    ("system","END OF EXAMPLEs. Below are the chat history. You must answer the follow up questions if asked using these messages."),
     MessagesPlaceholder(variable_name='chat_history'),
     ("human", "{input}")
 ])

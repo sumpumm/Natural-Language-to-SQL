@@ -1,10 +1,10 @@
 from langchain_ollama import ChatOllama
-from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_community.tools import QuerySQLDataBaseTool
 from langchain_classic.chains import create_sql_query_chain
 from langchain_core.output_parsers import  StrOutputParser,PydanticOutputParser
 from langchain_classic.schema.runnable import RunnablePassthrough, RunnableLambda
 from langchain_core.messages import HumanMessage, AIMessage
+from database import db
 from prompts.table_details_prompt import table_details_prompt2
 from prompts.rephraser import rephraser_template
 from prompts.custom_template import final_template
@@ -22,17 +22,6 @@ model1 = ChatOllama(
 model2=ChatOllama(
     model="gpt-oss:latest"
 )
-
-
-db_user = os.getenv("db_user")
-db_password = os.getenv("db_password")
-db_host = os.getenv("db_host")
-db_name = os.getenv("db_name")
-db_port = os.getenv("db_port")
-
-connection_string = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-
-db= SQLDatabase.from_uri(connection_string,sample_rows_in_table_info=1)
 
 chat_history=[]
 
